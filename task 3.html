@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>task 3 css framework</title>
+    <link rel="stylesheet" href="bootstrap.rtl.css">
+
+</head>
+<body class="body">
+    <div class="main d-flex flex-column justify-content-center align-items-center ">
+
+        <div class="searchArea m-3">
+            <input type="search" placeholder="نام سوره مثل 'ق'" class="rounded border border-primary" autofocus autocomplete="on">
+            <button type="button" class="btn btn-success" value="Search">Search</button>
+        </div>
+
+        <div class="cards visually-hidden"> 
+            <div class="sura card m-2 bg-info " >
+                <div class="card-body">
+                    <h3 class="card-title h3" id="suraName"></h3>
+                    <h4 class="card-title h4" id="suraNum"></h4>
+                    <p class="card-text" id="medOrMec"></p>
+                </div>
+            </div>
+            <div class="suraContext card m-5 bg-light">
+                <div class="card-body">
+                    <h3 class="card-title h3 ms-2" id="emla"></h3>
+                    <hr class="hr">
+                    <h6 class="card-title h6 ms-2" id="translate"></h6>
+                </div>
+            </div>
+        </div> 
+
+    </div>
+
+    <script src="../../../../../Documents/Farawin/CSS frameWork/js/bootstrap.min.js"></script>
+    <script src="./quran-metadata.js"></script>
+    <script src="./quran-text-emla.js"></script>
+    <script src="./quran-translate.fa.ansarian.js"></script>
+    <script>
+
+        // functions
+
+
+
+        findingSuraInfo = () =>{ 
+            
+            let cards = document.querySelector(".cards");
+
+
+            let search = document.querySelector("input[type='search']").value;
+            let myInfo =[];
+            suraInfo=[];
+            let c=-1;
+            quranDataSura.forEach(e => { 
+            c++;
+            e.forEach(e1 => {
+                if(e1 == search){
+                    myInfo.push(e1);
+                    myInfo.push(c);
+                    myInfo.push(e[7]);
+                    suraInfo=e;
+                }
+            })
+        })
+        // let cards = document.querySelector(".cards");
+       
+            if(myInfo[0]===0){
+
+                cards.setAttribute('class','cards d-none');
+                return;
+            }
+            if(myInfo[0] == undefined){
+                cards.setAttribute('class','cards visible')
+                let name = document.getElementById('suraName');
+                name.textContent = `سوره ${search} یافت نشد `;
+                let suraContext = document.getElementsByClassName('suraContext');
+                suraContext[0].setAttribute('class','suraContext card m-5 bg-info visually-hidden');
+                return;
+            }
+            cards.setAttribute('class','cards visible')
+            let name = document.getElementById('suraName');
+            console.log(name);
+            name.textContent = myInfo[0];
+
+            let num = document.getElementById('suraNum');
+            num.textContent = `سوره شماره  ${myInfo[1]} قرآن` ;
+
+            let medOrMec = document.getElementById('medOrMec');
+
+            if(myInfo[2] == "Medinan"){
+                medOrMec.textContent = "این سوره مدنی است"
+            }
+            else{
+                medOrMec.textContent = "این سوره مکی است"
+            }
+        
+        
+            let i = suraInfo[0];
+
+            // cards.remove();
+            if(myInfo[0] == "الفاتحة"){
+                let suraContext = document.getElementsByClassName('suraContext');
+                suraContext[0].setAttribute('class', 'suraContext card m-5 bg-light visually-hidden')
+                for(let c1=0; c1<suraInfo[1]; c1++){
+                let suraContext = document.createElement("div");
+                suraContext.setAttribute("class", "suraContext card m-5 bg-light");
+                cards.appendChild(suraContext);
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute("class", "card-body");
+                suraContext.appendChild(cardBody);
+                let h3 = document.createElement("h3");
+                h3.setAttribute("class","card-title h3 ms-2");
+                h3.setAttribute("id","emla");
+                if(c1==0){
+                h3.textContent = (`${quran[i]}`);
+                }
+                else{
+                    h3.textContent = (`${c1} -  ${quran[i]}`);
+                }
+                cardBody.appendChild(h3);
+                let hr = document.createElement("hr");
+                hr.setAttribute("class","hr");
+                cardBody.appendChild(hr);
+                let h6 = document.createElement("h6");
+                h6.setAttribute("class","card-title h6 ms-2");
+                h6.setAttribute("id","translate");
+                h6.textContent = (quranTranslateAnsarian[i]);
+                cardBody.appendChild(h6);
+                i++;
+
+            }
+        }
+            else{
+
+                let emla = document.getElementById("emla");
+                emla.textContent = "بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ";
+                let translate =document.getElementById("translate");
+                translate.textContent = "به نام خدا که رحمتش بی‌اندازه است و مهربانی‌اش همیشگی.";
+
+                for(let c1=0; c1<suraInfo[1]; c1++){
+                    let suraContext = document.createElement("div");
+                    suraContext.setAttribute("class", "suraContext card m-5 bg-light");
+                    cards.appendChild(suraContext);
+                    let cardBody = document.createElement("div");
+                    cardBody.setAttribute("class", "card-body");
+                    suraContext.appendChild(cardBody);
+                    let h3 = document.createElement("h3");
+                    h3.setAttribute("class","card-title h3 ms-2");
+                    h3.setAttribute("id","emla");
+                    h3.textContent = (`${c1+1} -  ${quran[i]}`);
+                    cardBody.appendChild(h3);
+                    let hr = document.createElement("hr");
+                    hr.setAttribute("class","hr");
+                    cardBody.appendChild(hr);
+                    let h6 = document.createElement("h6");
+                    h6.setAttribute("class","card-title h6 ms-2");
+                    h6.setAttribute("id","translate");
+                    h6.textContent = (quranTranslateAnsarian[i]);
+                    cardBody.appendChild(h6);
+                    i++;
+                }
+            }
+           
+
+        }
+
+    // code
+
+        let searchBtn = document.querySelector("button[type='button']");
+
+        searchBtn.addEventListener("click",findingSuraInfo);
+
+
+    </script>
+</body>
+</html>
